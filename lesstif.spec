@@ -109,7 +109,7 @@ rm -rf $RPM_BUILD_ROOT
 %makeinstall_std
 
 install -d $RPM_BUILD_ROOT/etc/X11
-ln -sf ../..%{_prefix}/lib/X11/mwm $RPM_BUILD_ROOT/etc/X11/mwm
+ln -sf ../..%{_libdir}/X11/mwm $RPM_BUILD_ROOT/etc/X11/mwm
 
 install -d $RPM_BUILD_ROOT%_lesstifdir/doc/Lessdox
 install -c -m 644 doc/lessdox/*/*.html $RPM_BUILD_ROOT%_lesstifdir/doc/Lessdox || :
@@ -141,7 +141,7 @@ cd $RPM_BUILD_ROOT%{_prefix}/bin/
 sed -e 's/imake $args/imake -T Imake-lesstif.tmpl $args/' < `which xmkmf` > mxmkmf
 
 # menu support
-mv $RPM_BUILD_ROOT%{_prefix}/lib/X11/mwm/system.mwmrc $RPM_BUILD_ROOT%{_prefix}/lib/X11/mwm/system.mwmrc-menu
+mv $RPM_BUILD_ROOT%{_libdir}/X11/mwm/system.mwmrc $RPM_BUILD_ROOT%{_libdir}/X11/mwm/system.mwmrc-menu
 mkdir -p $RPM_BUILD_ROOT%_sysconfdir/menu.d
 install -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%_sysconfdir/menu.d/lesstif-mwm
 
@@ -187,8 +187,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc clients/Motif-2.1/mwm/{COPYING,README}
 %config(noreplace) %_sysconfdir/X11/mwm
 %{_sysconfdir}/menu.d/%{name}-mwm
-%{_prefix}/lib/X11/mwm
-%{_prefix}/lib/X11/app-defaults/Mwm
+%{_libdir}/X11/mwm
+%{_libdir}/X11/app-defaults/Mwm
 %{_mandir}/man1/mwm.1*
 %{_mandir}/man5/mwmrc.5*
 %{_bindir}/mwm
