@@ -54,6 +54,7 @@ don't.
 Summary:	Lesstif Motif window manager clone based on fvwm
 Group:		Graphical desktop/Other
 Requires:	desktop-common-data
+Conflicts:	openmotif
 
 %description mwm
 MWM is a window manager that adheres largely
@@ -63,6 +64,7 @@ to the Motif mwm specification.
 Summary:	Lesstif clients
 Group:		Graphical desktop/Other
 Requires:	lesstif = %version
+Conflicts:	openmotif libopenmotif-devel
 
 %description clients
 Uil and xmbind clients for Lesstif.
@@ -73,6 +75,7 @@ Summary:	Static library and header files for Lesstif/Motif development
 Requires:	%libname = %version
 Obsoletes:	%{name}-devel < %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
+Conflicts:	libopenmotif-devel
 
 %description -n %develname
 This package contains the lesstif static library and header files
