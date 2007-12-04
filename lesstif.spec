@@ -28,7 +28,7 @@ Patch2:		lesstif-0.93.94-libtool.patch
 Patch3:		lesstif-0.95.0-disable-dtprint.patch
 
 BuildRoot:	%{_tmppath}/%name-%version-root
-BuildRequires:	flex, XFree86-devel, bison, xpm-devel, fontconfig-devel
+BuildRequires:	flex, X11-devel, bison, xpm-devel, fontconfig-devel
 BuildRequires:	imake
 BuildRequires:  autoconf
 
