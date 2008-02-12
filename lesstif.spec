@@ -2,7 +2,7 @@
 
 %define name		lesstif
 %define version		0.95.0
-%define release		%mkrel 1
+%define release		%mkrel 2
 
 %define major		2
 %define libname 	%mklibname %name %major
@@ -162,12 +162,6 @@ rm -f $RPM_BUILD_ROOT%{_prefix}/lib/mwm/*
 
 %post -n %libname -p /sbin/ldconfig
 %postun -n %libname -p /sbin/ldconfig
-
-%post mwm
-%update_menus
-
-%postun mwm
-%clean_menus
 
 %clean
 rm -rf $RPM_BUILD_ROOT
