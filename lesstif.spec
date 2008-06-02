@@ -1,12 +1,12 @@
-%define _lesstifdir	%_prefix/LessTif 
-
 %define name		lesstif
 %define version		0.95.0
-%define release		%mkrel 2
+%define release		%mkrel 3
 
 %define major		2
 %define libname 	%mklibname %name %major
 %define develname	%mklibname %name -d
+
+%define lessdoxdir	%{_docdir}/%{name}
 
 Summary:	A free Motif clone
 Name:		%{name}
@@ -19,7 +19,6 @@ Source:		http://prdownloads.sourceforge.net/%name/%name-%version.tar.gz
 Source2:	mwm.png.bz2
 Source3:	mwm32.png.bz2
 Source4:	lesstif-mwm-menu-xdg
-Patch0:		lesstif-mdk-menu.patch
 Patch1:		lesstif-0.93.94-libdir.patch
 Patch2:		lesstif-0.93.94-libtool.patch
 # Slightly ugly hack to disable libDtPrint build. It seems to be
@@ -28,8 +27,8 @@ Patch2:		lesstif-0.93.94-libtool.patch
 Patch3:		lesstif-0.95.0-disable-dtprint.patch
 
 BuildRoot:	%{_tmppath}/%name-%version-root
-BuildRequires:	flex, X11-devel, bison, xpm-devel, fontconfig-devel
-BuildRequires:	imake
+BuildRequires:	flex X11-devel bison xpm-devel fontconfig-devel
+BuildRequires:	imake x11-util-cf-files
 BuildRequires:  autoconf
 
 %description
@@ -86,7 +85,6 @@ and mxmkmf for Lesstif.
 
 %prep
 %setup -q -n lesstif-%{version}
-%patch0 -p0 -b .mdk
 %patch1 -p1 -b .libdir
 %patch2 -p1 -b .libtool
 autoconf
@@ -94,33 +92,47 @@ autoconf
 LESSTIFTOP=$PWD
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" ./configure \
-				--prefix=%{_prefix} \
-				--libdir=%{_libdir} \
-                		--mandir=%{_mandir} \
-				--enable-shared \
-				--enable-static \
-				--disable-maintainer-mode \
-				--disable-debug \
-				--enable-production
+CFLAGS="$RPM_OPT_FLAGS" -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\" \
+./configure \
+	--prefix=%{_prefix} \
+	--libdir=%{_libdir} \
+	-mandir=%{_mandir} \
+	-includedir=%{_includedir}/X11 \
+	-enable-shared \
+	-enable-static \
+	-disable-maintainer-mode \
+	-disable-debug \
+	-enable-production
 
+perl -pi -e '\
+s@^(appdir = ).*(/X11/app-defaults)@$1/usr/share$2@;\
+s@^(mwmddir = ).*(/X11/mwm)@$1/usr/share$2@'\
+    clients/Motif-2.1/mwm/Makefile
+
+perl -pi -e 's@^(configdir = ).*@$1 = %{_datadir}/X11/config@' lib/config/Makefile
+
+perl -pi -e 's@^(rootdir = ).*@$1%{lessdoxdir}@' `find doc -name Makefile`
+
+perl -pi -e 's@/X11R6/@/@g' `find . -name Makefile` scripts/motif-config.in
 
 %make
 
+perl -pi -e '\
+s@-L/usr(/X11R6)?/%{_lib} @@g;\
+s@-I/usr(/X11R6)?/include @@g'\
+    scripts/motif-config
+
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %makeinstall_std
 
-install -d $RPM_BUILD_ROOT/etc/X11
-ln -sf ../..%{_libdir}/X11/mwm $RPM_BUILD_ROOT/etc/X11/mwm
-
-install -d $RPM_BUILD_ROOT%_lesstifdir/doc/Lessdox
-install -c -m 644 doc/lessdox/*/*.html $RPM_BUILD_ROOT%_lesstifdir/doc/Lessdox || :
+install -d %{buildroot}%{lessdoxdir}/Lessdox
+install -c -m 644 doc/lessdox/*/*.html %{buildroot}%{lessdoxdir}/Lessdox || :
 
 # generate config files 
-cd $RPM_BUILD_ROOT%{_prefix}/lib/X11/config
+mkdir -p %{buildroot}%{_datadir}/X11/config
+cd %{buildroot}%{_datadir}/X11/config
 #mv Imake.tmpl Imake-lesstif.tmpl.orig
-
 
 perl -ne ' 
     if( /#include <Imake.rules>/ ){              
@@ -140,35 +152,31 @@ perl -ne '
 
 
 
-cd $RPM_BUILD_ROOT%{_prefix}/bin/
+cd %{buildroot}%{_bindir}
 sed -e 's/imake $args/imake -T Imake-lesstif.tmpl $args/' < `which xmkmf` > mxmkmf
 
 # menu support
-mv $RPM_BUILD_ROOT%{_libdir}/X11/mwm/system.mwmrc $RPM_BUILD_ROOT%{_libdir}/X11/mwm/system.mwmrc-menu
-mkdir -p $RPM_BUILD_ROOT%_sysconfdir/menu.d
-install -m 0755 %{SOURCE4} $RPM_BUILD_ROOT%_sysconfdir/menu.d/lesstif-mwm
+mkdir -p %{buildroot}/%{_menudir}
+install -m 0755 %{SOURCE4} %{buildroot}%{_menudir}/lesstif-mwm
 
 #icons
-mkdir -p $RPM_BUILD_ROOT%{_iconsdir}/hicolor/{16x16,32x32}/apps
-bzcat %{SOURCE2} >$RPM_BUILD_ROOT%{_iconsdir}/hicolor/16x16/apps/mwm.png
-bzcat %{SOURCE3} >$RPM_BUILD_ROOT%{_iconsdir}/hicolor/32x32/apps/mwm.png
+mkdir -p %{buildroot}%{_iconsdir}/hicolor/{16x16,32x32}/apps
+bzcat %{SOURCE2} >%{buildroot}%{_iconsdir}/hicolor/16x16/apps/mwm.png
+bzcat %{SOURCE3} >%{buildroot}%{_iconsdir}/hicolor/32x32/apps/mwm.png
 
-rm -f $RPM_BUILD_ROOT%{_prefix}/lib/X11/config/host.def
+rm -f %{buildroot}%{_datadir}/X11/config/host.def
 
 # remove unpackaged files
-rm -f $RPM_BUILD_ROOT%{_lesstifdir}/[ABCFIR]*
-rm -f $RPM_BUILD_ROOT%{_prefix}/lib/app-defaults/Mwm
-rm -f $RPM_BUILD_ROOT%{_prefix}/lib/mwm/*
+rm -fr %{buildroot}/%{_prefix}/LessTif
 
 %post -n %libname -p /sbin/ldconfig
 %postun -n %libname -p /sbin/ldconfig
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+##rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-#%doc etc/{example.motifbind,motifbind.sun+linux}
 %doc AUTHORS BUG-REPORTING COPYING COPYING.LIB CREDITS
 %doc ChangeLog NEWS
 %doc README ReleaseNotes.txt ReleaseNotes.html
@@ -182,10 +190,9 @@ rm -rf $RPM_BUILD_ROOT
 %files mwm
 %defattr(-,root,root,-)
 %doc clients/Motif-2.1/mwm/{COPYING,README}
-%config(noreplace) %_sysconfdir/X11/mwm
-%{_sysconfdir}/menu.d/%{name}-mwm
-%{_libdir}/X11/mwm
-%{_libdir}/X11/app-defaults/Mwm
+%{_menudir}/%{name}-mwm
+%{_datadir}/X11/mwm
+%{_datadir}/X11/app-defaults/Mwm
 %{_mandir}/man1/mwm.1*
 %{_mandir}/man5/mwmrc.5*
 %{_bindir}/mwm
@@ -201,17 +208,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n %develname
 %defattr(-,root,root,755)
-#%doc doc/{*.html,*.txt,lessdox/*/*.html,www.lesstif.org}
-%doc %{_lesstifdir}/doc
+%doc %{lessdoxdir}
 %{_includedir}/*
 %{_libdir}/*.a
 %{_libdir}/*.la
 %{_libdir}/*.so
 %{_bindir}/motif-config
 %{_bindir}/mxmkmf
-%{_prefix}/lib/X11/config/*
+%{_datadir}/X11/config/*
 %{_datadir}/aclocal/ac_find_motif.m4
 %{_mandir}/man1/*
 %{_mandir}/man3/*
 %{_mandir}/man5/*
-
