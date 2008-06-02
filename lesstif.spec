@@ -1,7 +1,3 @@
-%define name		lesstif
-%define version		0.95.0
-%define release		%mkrel 3
-
 %define major		2
 %define libname 	%mklibname %name %major
 %define develname	%mklibname %name -d
@@ -9,9 +5,9 @@
 %define lessdoxdir	%{_docdir}/%{name}
 
 Summary:	A free Motif clone
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		lesstif
+Version:	0.95.0
+Release:	%mkrel 3
 License:	LGPL
 URL:		http://www.lesstif.org/
 Group:		System/Libraries
@@ -172,9 +168,9 @@ rm -fr %{buildroot}/%{_prefix}/LessTif
 %post -n %libname -p /sbin/ldconfig
 %postun -n %libname -p /sbin/ldconfig
 
-post -n mwm
+post mwm
 %update_menus
-%postun -n mwm
+%postun mwm
 %clean_menus
 
 %clean
