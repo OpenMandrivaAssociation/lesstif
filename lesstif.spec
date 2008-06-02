@@ -170,9 +170,11 @@ rm -f %{buildroot}%{_datadir}/X11/config/host.def
 rm -fr %{buildroot}/%{_prefix}/LessTif
 
 %post -n %libname -p /sbin/ldconfig
-%update_menus
-
 %postun -n %libname -p /sbin/ldconfig
+
+post -n mwm
+%update_menus
+%postun -n mwm
 %clean_menus
 
 %clean
