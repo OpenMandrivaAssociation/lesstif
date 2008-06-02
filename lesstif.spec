@@ -170,10 +170,13 @@ rm -f %{buildroot}%{_datadir}/X11/config/host.def
 rm -fr %{buildroot}/%{_prefix}/LessTif
 
 %post -n %libname -p /sbin/ldconfig
+%update_menus
+
 %postun -n %libname -p /sbin/ldconfig
+%clean_menus
 
 %clean
-##rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
