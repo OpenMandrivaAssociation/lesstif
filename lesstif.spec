@@ -92,7 +92,7 @@ autoconf
 LESSTIFTOP=$PWD
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\" \
+CFLAGS="$RPM_OPT_FLAGS -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\"" \
 ./configure \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
