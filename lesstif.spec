@@ -168,7 +168,7 @@ rm -fr %{buildroot}/%{_prefix}/LessTif
 %post -n %libname -p /sbin/ldconfig
 %postun -n %libname -p /sbin/ldconfig
 
-post mwm
+%post mwm
 %update_menus
 %postun mwm
 %clean_menus
