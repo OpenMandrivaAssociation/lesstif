@@ -165,8 +165,12 @@ rm -f %{buildroot}%{_datadir}/X11/config/host.def
 # remove unpackaged files
 rm -fr %{buildroot}/%{_prefix}/LessTif
 
+%if %mdkversion < 200900
 %post -n %libname -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %libname -p /sbin/ldconfig
+%endif
 
 %post mwm
 %update_menus
