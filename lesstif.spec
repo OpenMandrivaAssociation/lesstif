@@ -7,7 +7,7 @@
 Summary:	A free Motif clone
 Name:		lesstif
 Version:	0.95.0
-Release:	%mkrel 4
+Release:	%mkrel 5
 License:	LGPL
 URL:		http://www.lesstif.org/
 Group:		System/Libraries
@@ -93,7 +93,7 @@ CFLAGS="$RPM_OPT_FLAGS -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\"" \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
 	-mandir=%{_mandir} \
-	-includedir=%{_includedir}/X11 \
+	-includedir=%{_includedir} \
 	-enable-shared \
 	-enable-static \
 	-disable-maintainer-mode \
@@ -190,7 +190,7 @@ rm -rf %{buildroot}
 
 %files -n %libname
 %defattr(-,root,root,-)
-%{_libdir}/*.so.*
+%{_libdir}/*.so.%{major}*
 
 %files mwm
 %defattr(-,root,root,-)
