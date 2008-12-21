@@ -7,7 +7,7 @@
 Summary:	A free Motif clone
 Name:		lesstif
 Version:	0.95.0
-Release:	%mkrel 5
+Release:	%mkrel 6
 License:	LGPL
 URL:		http://www.lesstif.org/
 Group:		System/Libraries
@@ -80,15 +80,17 @@ This package also contains development documentation in html (Lessdox),
 and mxmkmf for Lesstif.
 
 %prep
+
 %setup -q -n lesstif-%{version}
 %patch1 -p1 -b .libdir
 %patch2 -p1 -b .libtool
+%patch3 -p0 -b .dtprint
 autoconf
-%patch3 -p1 -b .dtprint
 LESSTIFTOP=$PWD
 
 %build
-CFLAGS="$RPM_OPT_FLAGS -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\"" \
+CFLAGS="%{optflags} -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\"" \
+LDFLAGS="%{ldflags}" \
 ./configure \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
