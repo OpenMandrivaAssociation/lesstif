@@ -21,7 +21,7 @@ Patch2:		lesstif-0.93.94-libtool.patch
 # completely useless, I don't think any apps use it. Debian doesn't
 # ship it. - AdamW 2007/07
 Patch3:		lesstif-0.95.0-disable-dtprint.patch
-
+Patch4:		lesstif-0.95.0-XxxxProperty-64bit.patch
 BuildRoot:	%{_tmppath}/%name-%version-root
 BuildRequires:	flex X11-devel bison xpm-devel fontconfig-devel
 BuildRequires:	imake x11-util-cf-files
@@ -85,6 +85,7 @@ and mxmkmf for Lesstif.
 %patch1 -p1 -b .libdir
 %patch2 -p1 -b .libtool
 %patch3 -p0 -b .dtprint
+%patch4 -p1 -b .XxxxProperty
 autoconf
 LESSTIFTOP=$PWD
 
