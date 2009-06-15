@@ -12,8 +12,8 @@ License:	LGPL
 URL:		http://www.lesstif.org/
 Group:		System/Libraries
 Source:		http://prdownloads.sourceforge.net/%name/%name-%version.tar.gz
-Source2:	mwm.png.bz2
-Source3:	mwm32.png.bz2
+Source2:	mwm.png
+Source3:	mwm32.png
 Source4:	lesstif-mwm-menu-xdg
 Patch1:		lesstif-0.93.94-libdir.patch
 Patch2:		lesstif-0.93.94-libtool.patch
