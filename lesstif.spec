@@ -159,8 +159,8 @@ install -m 0755 %{SOURCE4} %{buildroot}%{_menudir}/lesstif-mwm
 
 #icons
 mkdir -p %{buildroot}%{_iconsdir}/hicolor/{16x16,32x32}/apps
-bzcat %{SOURCE2} >%{buildroot}%{_iconsdir}/hicolor/16x16/apps/mwm.png
-bzcat %{SOURCE3} >%{buildroot}%{_iconsdir}/hicolor/32x32/apps/mwm.png
+cp %{SOURCE2} %{buildroot}%{_iconsdir}/hicolor/16x16/apps/mwm.png
+cp %{SOURCE3} %{buildroot}%{_iconsdir}/hicolor/32x32/apps/mwm.png
 
 rm -f %{buildroot}%{_datadir}/X11/config/host.def
 
