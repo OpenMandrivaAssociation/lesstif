@@ -6,22 +6,24 @@
 
 Summary:	A free Motif clone
 Name:		lesstif
-Version:	0.95.0
-Release:	%mkrel 7
+Version:	0.95.2
+Release:	%mkrel 1
 License:	LGPL
 URL:		http://www.lesstif.org/
 Group:		System/Libraries
-Source:		http://prdownloads.sourceforge.net/%name/%name-%version.tar.gz
+Source:		http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{name}-%{version}.tar.bz2
 Source2:	mwm.png
 Source3:	mwm32.png
 Source4:	lesstif-mwm-menu-xdg
-Patch1:		lesstif-0.93.94-libdir.patch
-Patch2:		lesstif-0.93.94-libtool.patch
+# Fedora patches
+Patch0: lesstif-0.95.2-motif-config.patch
+Patch1: lesstif-0.95.0-XxxxProperty-64bit.patch
+# Fix PutPixel32 crashing on 64 bit (RH bug #437133)
+Patch2: lesstif-0.95.0-PutPixel32.patch
 # Slightly ugly hack to disable libDtPrint build. It seems to be
 # completely useless, I don't think any apps use it. Debian doesn't
 # ship it. - AdamW 2007/07
 Patch3:		lesstif-0.95.0-disable-dtprint.patch
-Patch4:		lesstif-0.95.0-XxxxProperty-64bit.patch
 BuildRoot:	%{_tmppath}/%name-%version-root
 BuildRequires:	flex X11-devel bison xpm-devel fontconfig-devel
 BuildRequires:	imake x11-util-cf-files
@@ -82,10 +84,14 @@ and mxmkmf for Lesstif.
 %prep
 
 %setup -q -n lesstif-%{version}
-%patch1 -p1 -b .libdir
-%patch2 -p1 -b .libtool
+%patch0 -p1 -b .motif
+%patch1 -p1 -b .XxxxProperty
+%patch2 -p1 -b .putpixel
+
 %patch3 -p0 -b .dtprint
-%patch4 -p1 -b .XxxxProperty
+# Fix autoconf with libtool 2.2
+# http://trac.macports.org/ticket/18287
+sed -i -e "s:LT_HAVE_FREETYPE:FINDXFT_HAVE_FREETYPE:g" -e "s:LT_HAVE_XRENDER:FINDXFT_HAVE_XRENDER:g" acinclude.m4
 autoconf
 LESSTIFTOP=$PWD
 
