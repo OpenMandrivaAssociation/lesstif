@@ -25,9 +25,15 @@ Patch2: lesstif-0.95.0-PutPixel32.patch
 # ship it. - AdamW 2007/07
 Patch3:		lesstif-0.95.0-disable-dtprint.patch
 BuildRoot:	%{_tmppath}/%name-%version-root
-BuildRequires:	flex X11-devel bison xpm-devel fontconfig-devel
+BuildRequires:	flex
+BuildRequires:	libx11-devel
+BuildRequires:	libxft-devel
+BuildRequires:	libxt-devel
+BuildRequires:	libxext-devel
+BuildRequires:	libxrender-devel
+BuildRequires:	libxp-devel
+BuildRequires:	fontconfig-devel
 BuildRequires:	imake x11-util-cf-files
-BuildRequires:  autoconf
 
 %description
 Lesstif is an API compatible clone of the Motif toolkit. It implements 
@@ -96,13 +102,8 @@ autoconf
 LESSTIFTOP=$PWD
 
 %build
-CFLAGS="%{optflags} -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\"" \
-LDFLAGS="%{ldflags}" \
-./configure \
-	--prefix=%{_prefix} \
-	--libdir=%{_libdir} \
-	-mandir=%{_mandir} \
-	-includedir=%{_includedir} \
+export CFLAGS="%{optflags} -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\""
+%configure2_5x \
 	-enable-shared \
 	-enable-static \
 	-disable-maintainer-mode \
