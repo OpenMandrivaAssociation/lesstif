@@ -2,12 +2,12 @@
 %define libname 	%mklibname %name %major
 %define develname	%mklibname %name -d
 
-%define lessdoxdir	%{_docdir}/%{name}
+%define lessdoxdir     %{_docdir}/%{name}
 
 Summary:	A free Motif clone
 Name:		lesstif
 Version:	0.95.2
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	LGPL
 URL:		http://www.lesstif.org/
 Group:		System/Libraries
@@ -223,7 +223,6 @@ rm -rf %{buildroot}
 
 %files -n %develname
 %defattr(-,root,root,755)
-%doc %{lessdoxdir}
 %{_includedir}/*
 %{_libdir}/*.a
 %{_libdir}/*.la
@@ -232,6 +231,7 @@ rm -rf %{buildroot}
 %{_bindir}/mxmkmf
 %{_datadir}/X11/config/*
 %{_datadir}/aclocal/ac_find_motif.m4
-%{_mandir}/man1/*
+%{_mandir}/man1/ltversion.1.*
+%{_mandir}/man1/uil.1.*
 %{_mandir}/man3/*
 %{_mandir}/man5/*
