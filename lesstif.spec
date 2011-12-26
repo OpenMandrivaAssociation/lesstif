@@ -1,13 +1,15 @@
 %define major		2
-%define libname 	%mklibname %name %major
-%define develname	%mklibname %name -d
+%define libmrm		%mklibname Mrm %{major}
+%define libuil		%mklibname Uil %{major}
+%define libxm		%mklibname Xm %{major}
+%define develname	%mklibname %{name} -d
 
 %define lessdoxdir     %{_docdir}/%{name}
 
 Summary:	A free Motif clone
 Name:		lesstif
 Version:	0.95.2
-Release:	%mkrel 5
+Release:	6
 License:	LGPL
 URL:		http://www.lesstif.org/
 Group:		System/Libraries
@@ -24,7 +26,7 @@ Patch2: lesstif-0.95.0-PutPixel32.patch
 # completely useless, I don't think any apps use it. Debian doesn't
 # ship it. - AdamW 2007/07
 Patch3:		lesstif-0.95.0-disable-dtprint.patch
-BuildRoot:	%{_tmppath}/%name-%version-root
+
 BuildRequires:	flex
 BuildRequires:	libx11-devel
 BuildRequires:	libxft-devel
@@ -41,17 +43,29 @@ the Motif 2.1 API. Many Motif applications compile and run
 out-of-the-box with LessTif, and we want to hear about those that 
 don't.
 
-%package -n %libname
+%package -n %{libmrm}
 Summary:	Lesstif libraries
 Group:		System/Libraries
-Requires:	lesstif = %version
-Obsoletes:	%{mklibname lesstif 1}
+Obsoletes:	%{mklibname lesstif 2}
 
-%description -n %libname
-Lesstif is an API compatible clone of the Motif toolkit. It implements 
-the Motif 2.1 API. Many Motif applications compile and run 
-out-of-the-box with LessTif, and we want to hear about those that 
-don't.
+%description -n %{libmrm}
+This package contains a shared library for %{name}.
+
+%package -n %{libuil}
+Summary:	Lesstif libraries
+Group:		System/Libraries
+Obsoletes:	%{mklibname lesstif 2}
+
+%description -n %{libuil}
+This package contains a shared library for %{name}.
+
+%package -n %{libxm}
+Summary:	Lesstif libraries
+Group:		System/Libraries
+Obsoletes:	%{mklibname lesstif 2}
+
+%description -n %{libxm}
+This package contains a shared library for %{name}.
 
 %package mwm
 Summary:	Lesstif Motif window manager clone based on fvwm
@@ -66,35 +80,33 @@ to the Motif mwm specification.
 %package clients
 Summary:	Lesstif clients
 Group:		Graphical desktop/Other
-Requires:	lesstif = %version
+Requires:	lesstif = %{version}
 Conflicts:	openmotif libopenmotif-devel
 
 %description clients
 Uil and xmbind clients for Lesstif.
 
-%package -n %develname
+%package -n %{develname}
 Group:		Development/C
-Summary:	Static library and header files for Lesstif/Motif development
-Requires:	%libname = %version
+Summary:	Development library and header files for Lesstif/Motif development
+Requires:	%{libmrm} = %{version}
+Requires:	%{libuil} = %{version}
+Requires:	%{libxm} = %{version}
 Obsoletes:	%{name}-devel < %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Conflicts:	libopenmotif-devel
 
-%description -n %develname
-This package contains the lesstif static library and header files
+%description -n %{develname}
+This package contains the lesstif development library and header files
 required to develop motif-based applications.
 
 This package also contains development documentation in html (Lessdox),
 and mxmkmf for Lesstif.
 
 %prep
+%setup -q
+%apply_patches
 
-%setup -q -n lesstif-%{version}
-%patch0 -p1 -b .motif
-%patch1 -p1 -b .XxxxProperty
-%patch2 -p1 -b .putpixel
-
-%patch3 -p0 -b .dtprint
 # Fix autoconf with libtool 2.2
 # http://trac.macports.org/ticket/18287
 sed -i -e "s:LT_HAVE_FREETYPE:FINDXFT_HAVE_FREETYPE:g" -e "s:LT_HAVE_XRENDER:FINDXFT_HAVE_XRENDER:g" acinclude.m4
@@ -105,7 +117,7 @@ LESSTIFTOP=$PWD
 export CFLAGS="%{optflags} -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\""
 %configure2_5x \
 	-enable-shared \
-	-enable-static \
+	-disable-static \
 	-disable-maintainer-mode \
 	-disable-debug \
 	-enable-production
@@ -114,11 +126,8 @@ perl -pi -e '\
 s@^(appdir = ).*(/X11/app-defaults)@$1/usr/share$2@;\
 s@^(mwmddir = ).*(/X11/mwm)@$1/usr/share$2@'\
     clients/Motif-2.1/mwm/Makefile
-
 perl -pi -e 's@^(configdir = ).*@$1 = %{_datadir}/X11/config@' lib/config/Makefile
-
 perl -pi -e 's@^(rootdir = ).*@$1%{lessdoxdir}@' `find doc -name Makefile`
-
 perl -pi -e 's@/X11R6/@/@g' `find . -name Makefile` scripts/motif-config.in
 
 %make
@@ -157,7 +166,6 @@ perl -ne '
 ' < %{_datadir}/X11/config/Imake.tmpl > Imake-lesstif.tmpl
 
 
-
 cd %{buildroot}%{_bindir}
 sed -e 's/imake $args/imake -T Imake-lesstif.tmpl $args/' < `which xmkmf` > mxmkmf
 
@@ -175,35 +183,23 @@ rm -f %{buildroot}%{_datadir}/X11/config/host.def
 # remove unpackaged files
 rm -fr %{buildroot}/%{_prefix}/LessTif
 
-%if %mdkversion < 200900
-%post -n %libname -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %libname -p /sbin/ldconfig
-%endif
-
-%post mwm
-%update_menus
-%postun mwm
-%clean_menus
-
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS BUG-REPORTING COPYING COPYING.LIB CREDITS
 %doc ChangeLog NEWS
 %doc README ReleaseNotes.txt ReleaseNotes.html
 %doc doc/www.lesstif.org/FAQ.html
 %{_mandir}/man1/lesstif.1*
 
-%files -n %libname
-%defattr(-,root,root,-)
-%{_libdir}/*.so.%{major}*
+%files -n %{libmrm}
+%{_libdir}/libMrm.so.%{major}*
+
+%files -n %{libuil}
+%{_libdir}/libUil.so.%{major}*
+
+%files -n %{libxm}
+%{_libdir}/libXm.so.%{major}*
 
 %files mwm
-%defattr(-,root,root,-)
 %doc clients/Motif-2.1/mwm/{COPYING,README}
 %{_menudir}/%{name}-mwm
 %{_datadir}/X11/mwm
@@ -215,17 +211,13 @@ rm -rf %{buildroot}
 %{_iconsdir}/hicolor/32x32/apps/mwm.png
 
 %files clients
-%defattr(-,root,root,-)
 %doc doc/UIL.txt
 %{_bindir}/uil
 %{_bindir}/xmbind
 %{_mandir}/man1/xmbind.1*
 
-%files -n %develname
-%defattr(-,root,root,755)
+%files -n %{develname}
 %{_includedir}/*
-%{_libdir}/*.a
-%{_libdir}/*.la
 %{_libdir}/*.so
 %{_bindir}/motif-config
 %{_bindir}/mxmkmf
@@ -235,3 +227,4 @@ rm -rf %{buildroot}
 %{_mandir}/man1/uil.1.*
 %{_mandir}/man3/*
 %{_mandir}/man5/*
+
