@@ -1,3 +1,5 @@
+%define _disable_ld_no_undefined 1
+
 %define major		2
 %define libmrm		%mklibname Mrm %{major}
 %define libuil		%mklibname Uil %{major}
@@ -111,13 +113,12 @@ and mxmkmf for Lesstif.
 # http://trac.macports.org/ticket/18287
 sed -i -e "s:LT_HAVE_FREETYPE:FINDXFT_HAVE_FREETYPE:g" -e "s:LT_HAVE_XRENDER:FINDXFT_HAVE_XRENDER:g" acinclude.m4
 autoconf
-LESSTIFTOP=$PWD
+#LESSTIFTOP=$PWD
 
 %build
 export CFLAGS="%{optflags} -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\""
 %configure2_5x \
 	-enable-shared \
-	-disable-static \
 	-disable-maintainer-mode \
 	-disable-debug \
 	-enable-production
@@ -126,7 +127,7 @@ perl -pi -e '\
 s@^(appdir = ).*(/X11/app-defaults)@$1/usr/share$2@;\
 s@^(mwmddir = ).*(/X11/mwm)@$1/usr/share$2@'\
     clients/Motif-2.1/mwm/Makefile
-perl -pi -e 's@^(configdir = ).*@$1 = %{_datadir}/X11/config@' lib/config/Makefile
+perl -pi -e 's@^(configdir = ).*@$1%{_datadir}/X11/config@' lib/config/Makefile
 perl -pi -e 's@^(rootdir = ).*@$1%{lessdoxdir}@' `find doc -name Makefile`
 perl -pi -e 's@/X11R6/@/@g' `find . -name Makefile` scripts/motif-config.in
 
@@ -183,6 +184,12 @@ rm -f %{buildroot}%{_datadir}/X11/config/host.def
 # remove unpackaged files
 rm -fr %{buildroot}/%{_prefix}/LessTif
 
+%post mwm 	 
+%update_menus 	 
+
+%postun mwm 	 
+%clean_menus
+
 %files
 %doc AUTHORS BUG-REPORTING COPYING COPYING.LIB CREDITS
 %doc ChangeLog NEWS
@@ -227,4 +234,5 @@ rm -fr %{buildroot}/%{_prefix}/LessTif
 %{_mandir}/man1/uil.1.*
 %{_mandir}/man3/*
 %{_mandir}/man5/*
+%exclude %{_mandir}/man5/mwmrc.5*
 
