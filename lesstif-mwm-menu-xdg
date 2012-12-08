@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ "$USER_MENU" = "1" ]; then
+ OUTPUTDIR=$HOME/.mwm
+else
+ OUTPUTDIR=/etc/X11/mwm
+fi
+
+cp /etc/X11/mwm/system.mwmrc-menu $OUTPUTDIR/system.mwmrc
+
+if [ "$VERBOSE" = "1" ]; then
+ echo "writing to $OUTPUTDIR/menu"
+/usr/bin/xdg_menu --verbose --format mwm  >> $OUTPUTDIR/system.mwmrc
+else
+/usr/bin/xdg_menu --format mwm >> $OUTPUTDIR/system.mwmrc 2> /dev/null
+fi
+

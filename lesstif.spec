@@ -236,3 +236,145 @@ rm -fr %{buildroot}/%{_prefix}/LessTif
 %{_mandir}/man5/*
 %exclude %{_mandir}/man5/mwmrc.5*
 
+
+
+%changelog
+* Mon Dec 26 2011 Matthew Dawkins <mattydaw@mandriva.org> 0.95.2-6
++ Revision: 745381
+- fixed build
+- added back post/un menus
+- removed dup man5 page in devel
+- rebuild
+- split out each lib pkgs
+- disable static
+- cleaned up spec
+- employed apply_patches (made p3 to patch level 1)
+
+* Wed May 04 2011 Oden Eriksson <oeriksson@mandriva.com> 0.95.2-5
++ Revision: 666072
+- mass rebuild
+
+* Wed Feb 02 2011 Funda Wang <fwang@mandriva.org> 0.95.2-4
++ Revision: 635357
+- fix conlficts file
+- tighten BR
+
+* Fri Dec 03 2010 Oden Eriksson <oeriksson@mandriva.com> 0.95.2-3mdv2011.0
++ Revision: 606401
+- rebuild
+
+* Sun Mar 14 2010 Oden Eriksson <oeriksson@mandriva.com> 0.95.2-2mdv2010.1
++ Revision: 519016
+- rebuild
+
+* Tue Aug 04 2009 Frederik Himpe <fhimpe@mandriva.org> 0.95.2-1mdv2010.0
++ Revision: 409499
+- Update to new version 0.95.2
+- Fix autoconf call with libtool 2.2 (fix via Macports)
+- Remove old unneeded patches
+- Sync patches with Fedora
+
+* Mon Jun 15 2009 Funda Wang <fwang@mandriva.org> 0.95.0-7mdv2010.0
++ Revision: 385992
+- fix Xxxx Property from fedora
+- more unbziped
+- bunzip2 png files
+
+* Sun Dec 21 2008 Oden Eriksson <oeriksson@mandriva.com> 0.95.0-6mdv2009.1
++ Revision: 316982
+- rediffed fuzzy patches
+- safer fix to disable libDtPrint (P3)
+- use %%ldflags
+
+* Fri Jul 04 2008 Anssi Hannula <anssi@mandriva.org> 0.95.0-5mdv2009.0
++ Revision: 231746
+- move headers back to /usr/include where they are expected by other
+  software and where they are on other distributions
+- ensure major correctness in file list
+
+* Tue Jun 17 2008 Thierry Vignaud <tv@mandriva.org> 0.95.0-4mdv2009.0
++ Revision: 222406
+- rebuild
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+    - fix pcpa typo
+
+  + Paulo Andrade <pcpa@mandriva.com.br>
+    - Don't directly use files from /usr/X11R6, neither advertise them.
+      Install Motif headers unders /usr/include/X11.
+
+* Wed Feb 13 2008 Adam Williamson <awilliamson@mandriva.org> 0.95.0-2mdv2008.1
++ Revision: 166850
+- don't run update_menus and clean_menus for mwm, it has no menu entry
+
+* Fri Dec 21 2007 Olivier Blin <blino@mandriva.org> 0.95.0-1mdv2008.1
++ Revision: 136535
+- restore BuildRoot
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill re-definition of %%buildroot on Pixel's request
+    - buildrequires X11-devel instead of XFree86-devel
+
+  + Pixel <pixel@mandriva.com>
+    - add various explicit conflicts with openmotif and its subpackages
+
+* Wed Jul 18 2007 Adam Williamson <awilliamson@mandriva.org> 0.95.0-1mdv2008.0
++ Revision: 53167
+- correct paths for x86-64
+- fd.o icons
+- drop old menu entry
+- drop old patch3 (merged upstream)
+- rediff patches 1 and 2
+- improve description
+- new patch3: disable libDtPrint (useless)
+- drop 1.x compatible build (as per upstream)
+- new release 0.95.0
+
+
+* Tue Aug 29 2006 Thierry Vignaud <tvignaud@mandriva.com> 0.93.94-12mdv2007.0
+- lesstif doesn't need %%post/%%postun ldconfig, but the %%libname1 and
+  %%libname2 packages sure do (vdanen)
+- use --enable-production: security fix for CVE-2006-4124 (stew)
+
+* Mon Jul 17 2006 Frederic Crozat <fcrozat@mandriva.com> 0.93.94-11mdv2007.0
+- Final switch to XDG menu
+
+* Fri Jul 14 2006 Olivier Thauvin <nanardon@mandriva.org> 0.93.94-10mdv2007.0
+- fix path for lib64
+
+* Sun Jun 25 2006 Götz Waschk <waschk@mandriva.org> 0.93.94-9mdv2007.0
+- fix buildrequires
+
+* Sat Jun 24 2006 Christiaan Welvaart <cjw@daneel.dyndns.org> 0.93.94-8
+- add BuildRequires: x11-util-cf-files
+
+* Sun Jun 11 2006 Olivier Thauvin <nanardon@mandriva.org> 0.93.94-7mdv2007.0
+- fix prefix (aka /usr instead /usr/X11R6)
+- %%mkrel
+
+* Thu May 04 2006 Frederic Crozat <fcrozat@mandriva.com> 0.93.94-6mdk
+- Update source1, patch0, we are Mandriva Linux now
+- Add XDG menu script, patch0 will need to be update again 
+  when old menu system is replaced by new XDG based scripts
+
+* Sat Dec 31 2005 Mandriva Linux Team <http://www.mandrivaexpert.com/> 0.93.94-5mdk
+- Rebuild
+
+* Mon Mar 14 2005 Thierry Vignaud <tvignaud@mandrakesoft.com> 0.93.94-4mdk
+- fix ordering of packages on upgrade (#14537)
+
+* Thu Feb 24 2005 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 0.93.94-3mdk
+- first round of 64-bit fixes
+
+* Tue Feb 22 2005 Thierry Vignaud <tvignaud@mandrakesoft.com> 0.93.94-2mdk
+- libification
+
+* Mon Dec 01 2003 Götz Waschk <waschk@linux-mandrake.com> 0.93.94-1mdk
+- bzip2 source1
+- rediff patches
+- new version
+
+* Fri Nov 14 2003 Götz Waschk <waschk@linux-mandrake.com> 0.93.91-1mdk
+- new version
+
