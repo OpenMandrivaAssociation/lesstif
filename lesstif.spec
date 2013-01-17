@@ -11,7 +11,7 @@
 Summary:	A free Motif clone
 Name:		lesstif
 Version:	0.95.2
-Release:	6
+Release:	8
 License:	LGPL
 URL:		http://www.lesstif.org/
 Group:		System/Libraries
@@ -24,10 +24,8 @@ Patch0: lesstif-0.95.2-motif-config.patch
 Patch1: lesstif-0.95.0-XxxxProperty-64bit.patch
 # Fix PutPixel32 crashing on 64 bit (RH bug #437133)
 Patch2: lesstif-0.95.0-PutPixel32.patch
-# Slightly ugly hack to disable libDtPrint build. It seems to be
-# completely useless, I don't think any apps use it. Debian doesn't
-# ship it. - AdamW 2007/07
-Patch3:		lesstif-0.95.0-disable-dtprint.patch
+Patch3:		lesstif-0.95.2-link-fontconfig.patch
+Patch4:		lesstif-0.95.2-automake-1.13.patch
 
 BuildRequires:	flex
 BuildRequires:	libx11-devel
@@ -35,9 +33,13 @@ BuildRequires:	libxft-devel
 BuildRequires:	libxt-devel
 BuildRequires:	libxext-devel
 BuildRequires:	libxrender-devel
-BuildRequires:	libxp-devel
 BuildRequires:	fontconfig-devel
 BuildRequires:	imake x11-util-cf-files
+
+# Having libXp installed while building lesstif results in lesstif linking
+# to libXp -- which we don't want, libXp has been deprecated for ages and
+# apparently never worked right.
+BuildConflicts:	libxp-devel
 
 %description
 Lesstif is an API compatible clone of the Motif toolkit. It implements 
@@ -112,6 +114,10 @@ and mxmkmf for Lesstif.
 # Fix autoconf with libtool 2.2
 # http://trac.macports.org/ticket/18287
 sed -i -e "s:LT_HAVE_FREETYPE:FINDXFT_HAVE_FREETYPE:g" -e "s:LT_HAVE_XRENDER:FINDXFT_HAVE_XRENDER:g" acinclude.m4
+
+libtoolize --force
+aclocal -I .
+automake -a
 autoconf
 #LESSTIFTOP=$PWD
 

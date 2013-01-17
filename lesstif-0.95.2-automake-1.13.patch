@@ -1,0 +1,19 @@
+--- lesstif-0.95.2/configure.in.bero	2013-01-17 19:28:53.969692270 +0100
++++ lesstif-0.95.2/configure.in	2013-01-17 19:28:59.639624604 +0100
+@@ -63,7 +63,7 @@ dnl Override a default in libtool. We do
+ dnl
+ AC_DISABLE_STATIC
+ 
+-AM_CONFIG_HEADER(include/LTconfig.h)
++AC_CONFIG_HEADERS([include/LTconfig.h])
+ 
+ dnl
+ dnl This used to be in acconfig.h
+@@ -249,7 +249,6 @@ fi
+ AC_MSG_RESULT("$CFLAGS $warn_flags")
+ 
+ AC_AIX
+-AM_PROG_CC_STDC
+ AC_EXEEXT
+ AC_OBJEXT
+ AM_PROG_LIBTOOL

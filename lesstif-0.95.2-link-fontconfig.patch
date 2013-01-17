@@ -1,0 +1,11 @@
+--- lesstif-0.95.2/lib/Xm-2.1/Makefile.am.bero	2013-01-17 19:26:30.347391575 +0100
++++ lesstif-0.95.2/lib/Xm-2.1/Makefile.am	2013-01-17 19:27:00.878028542 +0100
+@@ -53,7 +53,7 @@ endif
+ 
+ SRCS	= ${SRCS_2_1} ${SRCS_2_0} ${SRCS_1_2} ${XDND_SRC}
+ 
+-libXm_la_LIBADD = $(X_PRE_LIBS) -lXt $(XPLIB) $(X_LIBS) -lX11 $(X_EXTRA_LIBS)
++libXm_la_LIBADD = $(X_PRE_LIBS) -lXt $(XPLIB) $(X_LIBS) -lX11 $(X_EXTRA_LIBS) -lfontconfig
+ 
+ #if Have_Libxp
+ #libXm_la_LIBADD = -lXt $(X_PRE_LIBS) -lXp -lXext -lX11 \
