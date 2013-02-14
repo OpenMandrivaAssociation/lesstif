@@ -35,6 +35,8 @@ BuildRequires:	libxext-devel
 BuildRequires:	libxrender-devel
 BuildRequires:	fontconfig-devel
 BuildRequires:	imake x11-util-cf-files
+# For xdg_menu
+BuildRequires:	desktop-common-data
 
 # Having libXp installed while building lesstif results in lesstif linking
 # to libXp -- which we don't want, libXp has been deprecated for ages and
