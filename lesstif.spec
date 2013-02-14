@@ -179,8 +179,8 @@ cd %{buildroot}%{_bindir}
 sed -e 's/imake $args/imake -T Imake-lesstif.tmpl $args/' < `which xmkmf` > mxmkmf
 
 # menu support
-mkdir -p %{buildroot}/%{_menudir}
-install -m 0755 %{SOURCE4} %{buildroot}%{_menudir}/lesstif-mwm
+mkdir -p %{buildroot}/%_prefix/lib/menu
+install -m 0755 %{SOURCE4} %{buildroot}%_prefix/lib/menu/lesstif-mwm
 
 #icons
 mkdir -p %{buildroot}%{_iconsdir}/hicolor/{16x16,32x32}/apps
@@ -191,12 +191,6 @@ rm -f %{buildroot}%{_datadir}/X11/config/host.def
 
 # remove unpackaged files
 rm -fr %{buildroot}/%{_prefix}/LessTif
-
-%post mwm 	 
-%update_menus 	 
-
-%postun mwm 	 
-%clean_menus
 
 %files
 %doc AUTHORS BUG-REPORTING COPYING COPYING.LIB CREDITS
@@ -216,7 +210,7 @@ rm -fr %{buildroot}/%{_prefix}/LessTif
 
 %files mwm
 %doc clients/Motif-2.1/mwm/{COPYING,README}
-%{_menudir}/%{name}-mwm
+%_prefix/lib/menu/%{name}-mwm
 %{_datadir}/X11/mwm
 %{_datadir}/X11/app-defaults/Mwm
 %{_mandir}/man1/mwm.1*
