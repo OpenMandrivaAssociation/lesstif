@@ -28,11 +28,11 @@ Patch3:		lesstif-0.95.2-link-fontconfig.patch
 Patch4:		lesstif-0.95.2-automake-1.13.patch
 
 BuildRequires:	flex
-BuildRequires:	libx11-devel
-BuildRequires:	libxft-devel
-BuildRequires:	libxt-devel
-BuildRequires:	libxext-devel
-BuildRequires:	libxrender-devel
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xft)
+BuildRequires:	pkgconfig(xt)
+BuildRequires:	pkgconfig(xext)
+BuildRequires:	pkgconfig(xrender)
 BuildRequires:	fontconfig-devel
 BuildRequires:	imake x11-util-cf-files
 # For xdg_menu
