@@ -128,18 +128,19 @@ export CFLAGS="%{optflags} -DMWM_DDIR=\\\"%{_datadir}/X11/mwm\\\""
 	-disable-maintainer-mode \
 	-disable-debug \
 	-enable-production
+ln configure.ac configure.in
 
-sed -i -e '\
+perl -p -i -e '\
 s@^(appdir = ).*(/X11/app-defaults)@$1/usr/share$2@;\
 s@^(mwmddir = ).*(/X11/mwm)@$1/usr/share$2@'\
     clients/Motif-2.1/mwm/Makefile
-sed -i -e 's@^(configdir = ).*@$1%{_datadir}/X11/config@' lib/config/Makefile
-sed -i -e 's@^(rootdir = ).*@$1%{lessdoxdir}@' `find doc -name Makefile`
-sed -i -e 's@/X11R6/@/@g' `find . -name Makefile` scripts/motif-config.in
+perl -p -i -e 's@^(configdir = ).*@$1%{_datadir}/X11/config@' lib/config/Makefile
+perl -p -i -e 's@^(rootdir = ).*@$1%{lessdoxdir}@' `find doc -name Makefile`
+perl -p -i -e 's@/X11R6/@/@g' `find . -name Makefile` scripts/motif-config.in
 
 %make
 
-sed -i -e '\
+perl -p -i -e '\
 s@-L/usr(/X11R6)?/%{_lib} @@g;\
 s@-I/usr(/X11R6)?/include @@g'\
     scripts/motif-config
