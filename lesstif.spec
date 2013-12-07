@@ -10,7 +10,7 @@
 Summary:	A free Motif clone
 Name:		lesstif
 Version:	0.95.2
-Release:	12
+Release:	13
 License:	LGPLv2
 Url:		http://www.lesstif.org/
 Group:		System/Libraries
