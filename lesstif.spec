@@ -109,7 +109,7 @@ and mxmkmf for Lesstif.
 
 %prep
 %setup -q
-%apply_patches
+%autopatch -p1
 
 # Fix autoconf with libtool 2.2
 # http://trac.macports.org/ticket/18287
