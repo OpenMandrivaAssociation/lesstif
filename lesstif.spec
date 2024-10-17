@@ -12,7 +12,7 @@ Name:		lesstif
 Version:	0.95.2
 Release:	17
 License:	LGPLv2
-Url:		http://www.lesstif.org/
+Url:		https://www.lesstif.org/
 Group:		System/Libraries
 Source0:	http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{name}-%{version}.tar.bz2
 Source2:	mwm.png
