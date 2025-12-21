@@ -27,6 +27,10 @@ Patch3:	lesstif-0.95.2-link-fontconfig.patch
 Patch4:	lesstif-0.95.2-automake-1.13.patch
 
 # For xdg_menu
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
 BuildRequires:	desktop-common-data
 BuildRequires:	flex
 BuildRequires:	imake
